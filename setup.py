@@ -5,7 +5,7 @@ setup(
     version="0.1.0",
     description="ML FireSafetyTutor - Interactive platform for learning ML in fire safety applications",
     author="Author",
-    packages=find_packages(include=["modules", "modules.*"]),
+    packages=find_packages(include=["mlfiresafetytutor", "mlfiresafetytutor.*", "modules", "modules.*"]),
     py_modules=["app", "auth", "database", "ml_utils", "utils", "visualization", "evacuation_example"],
     python_requires=">=3.11",
     install_requires=[

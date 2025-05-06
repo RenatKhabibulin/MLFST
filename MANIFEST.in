@@ -1,0 +1,9 @@
+include LICENSE
+include README.md
+include packages.txt
+include *.py
+include *.html
+include *.txt
+include .streamlit/config.toml
+recursive-include modules *.py
+recursive-include data *
