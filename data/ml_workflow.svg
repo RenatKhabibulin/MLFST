@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="380" viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .box {
+      fill: white;
+      stroke-width: 2.5;
+      rx: 12;
+      ry: 12;
+      filter: drop-shadow(3px 3px 4px rgba(0,0,0,0.2));
+    }
+    .arrow {
+      stroke-width: 2.5;
+      fill: none;
+      marker-end: url(#arrowhead);
+    }
+    .box-text {
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-weight: bold;
+      text-anchor: middle;
+    }
+    .box-subtext {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      text-anchor: middle;
+    }
+    .title {
+      font-family: Arial, sans-serif;
+      font-size: 24px;
+      font-weight: bold;
+      text-anchor: middle;
+    }
+    .subtitle {
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      text-anchor: middle;
+      font-style: italic;
+    }
+    .collection {
+      stroke: #FF5722;
+      fill: #FBE9E7;
+    }
+    .preparation {
+      stroke: #FF9800;
+      fill: #FFF3E0;
+    }
+    .feature {
+      stroke: #4CAF50;
+      fill: #E8F5E9;
+    }
+    .training {
+      stroke: #2196F3;
+      fill: #E3F2FD;
+    }
+    .evaluation {
+      stroke: #9C27B0;
+      fill: #F3E5F5;
+    }
+    .deployment {
+      stroke: #795548;
+      fill: #EFEBE9;
+    }
+    .icon {
+      font-family: Arial, sans-serif;
+      font-size: 20px;
+      text-anchor: middle;
+      font-weight: bold;
+    }
+  </style>
+  
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <text x="400" y="40" class="title">Machine Learning Workflow for Fire Safety Applications</text>
+  <text x="400" y="65" class="subtitle">A systematic approach to developing ML solutions for fire safety challenges</text>
+  
+  <!-- Process boxes -->
+  <rect x="50" y="100" width="120" height="100" class="box collection" />
+  <text x="110" y="130" class="box-text">1. Data Collection</text>
+  <text x="110" y="155" class="box-subtext">Fire incident reports</text>
+  <text x="110" y="175" class="box-subtext">Sensor measurements</text>
+  <text x="110" y="195" class="box-subtext">Building specifications</text>
+  
+  <rect x="190" y="100" width="120" height="100" class="box preparation" />
+  <text x="250" y="130" class="box-text">2. Data Preparation</text>
+  <text x="250" y="155" class="box-subtext">Cleaning anomalies</text>
+  <text x="250" y="175" class="box-subtext">Missing values handling</text>
+  <text x="250" y="195" class="box-subtext">Data normalization</text>
+  
+  <rect x="330" y="100" width="120" height="100" class="box feature" />
+  <text x="390" y="130" class="box-text">3. Feature Engineering</text>
+  <text x="390" y="155" class="box-subtext">Fire risk factors</text>
+  <text x="390" y="175" class="box-subtext">Time-based features</text>
+  <text x="390" y="195" class="box-subtext">Spatial correlations</text>
+  
+  <rect x="470" y="100" width="120" height="100" class="box training" />
+  <text x="530" y="130" class="box-text">4. Model Training</text>
+  <text x="530" y="155" class="box-subtext">Algorithm selection</text>
+  <text x="530" y="175" class="box-subtext">Hyperparameter tuning</text>
+  <text x="530" y="195" class="box-subtext">Ensemble methods</text>
+  
+  <rect x="610" y="100" width="120" height="100" class="box evaluation" />
+  <text x="670" y="130" class="box-text">5. Model Evaluation</text>
+  <text x="670" y="155" class="box-subtext">Performance metrics</text>
+  <text x="670" y="175" class="box-subtext">Cross-validation</text>
+  <text x="670" y="195" class="box-subtext">Error analysis</text>
+  
+  <rect x="330" y="250" width="120" height="100" class="box deployment" />
+  <text x="390" y="280" class="box-text">6. Deployment</text>
+  <text x="390" y="305" class="box-subtext">Fire monitoring system</text>
+  <text x="390" y="325" class="box-subtext">Real-time predictions</text>
+  <text x="390" y="345" class="box-subtext">Maintenance updates</text>
+  
+  <!-- Icons -->
+  <circle cx="75" cy="125" r="12" fill="#FF5722" />
+  <text x="75" y="130" class="icon" fill="white">📊</text>
+  
+  <circle cx="215" cy="125" r="12" fill="#FF9800" />
+  <text x="215" y="130" class="icon" fill="white">🧹</text>
+  
+  <circle cx="355" cy="125" r="12" fill="#4CAF50" />
+  <text x="355" y="130" class="icon" fill="white">⚙️</text>
+  
+  <circle cx="495" cy="125" r="12" fill="#2196F3" />
+  <text x="495" y="130" class="icon" fill="white">🧠</text>
+  
+  <circle cx="635" cy="125" r="12" fill="#9C27B0" />
+  <text x="635" y="130" class="icon" fill="white">📈</text>
+  
+  <circle cx="355" cy="275" r="12" fill="#795548" />
+  <text x="355" y="280" class="icon" fill="white">🚀</text>
+  
+  <!-- Arrows -->
+  <path d="M 170 150 L 190 150" class="arrow" stroke="#FF5722" />
+  <path d="M 310 150 L 330 150" class="arrow" stroke="#FF9800" />
+  <path d="M 450 150 L 470 150" class="arrow" stroke="#4CAF50" />
+  <path d="M 590 150 L 610 150" class="arrow" stroke="#2196F3" />
+  <path d="M 670 200 L 670 300 L 450 300" class="arrow" stroke="#9C27B0" />
+  
+  <!-- Feedback loop -->
+  <path d="M 330 300 L 110 300 L 110 200" class="arrow" stroke="#795548" />
+</svg>

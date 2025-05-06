@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="520" viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .box {
+      fill: white;
+      stroke-width: 2;
+      rx: 15;
+      ry: 15;
+    }
+    .center-circle {
+      fill: #FFEBEE;
+      stroke: #FF5722;
+      stroke-width: 3;
+      filter: drop-shadow(0 0 10px rgba(255,87,34,0.3));
+    }
+    .application-box {
+      fill: white;
+      stroke-width: 2.5;
+      rx: 12;
+      ry: 12;
+      filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.2));
+    }
+    .line {
+      stroke-width: 2.5;
+      fill: none;
+    }
+    .title {
+      font-family: Arial, sans-serif;
+      font-size: 28px;
+      font-weight: bold;
+      text-anchor: middle;
+    }
+    .subtitle {
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+      font-weight: bold;
+      text-anchor: middle;
+    }
+    .box-title {
+      font-family: Arial, sans-serif;
+      font-size: 17px;
+      font-weight: bold;
+      text-anchor: middle;
+    }
+    .box-text {
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      text-anchor: middle;
+    }
+    .footer-text {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      text-anchor: middle;
+      font-style: italic;
+    }
+    .algorithm {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      font-style: italic;
+      text-anchor: middle;
+    }
+    .risk-assessment {
+      stroke: #F44336;
+      fill: #FFEBEE;
+    }
+    .detection {
+      stroke: #FF9800;
+      fill: #FFF3E0;
+    }
+    .evacuation {
+      stroke: #2196F3;
+      fill: #E3F2FD;
+    }
+    .maintenance {
+      stroke: #4CAF50;
+      fill: #E8F5E9;
+    }
+    .resource {
+      stroke: #9C27B0;
+      fill: #F3E5F5;
+    }
+    .icon {
+      font-family: Arial, sans-serif;
+      font-size: 24px;
+      text-anchor: middle;
+    }
+  </style>
+  
+  <text x="400" y="40" class="title">Machine Learning Applications in Fire Safety</text>
+  
+  <!-- Center circle -->
+  <circle cx="400" cy="210" r="85" class="center-circle" />
+  <text x="400" y="200" class="subtitle">Machine Learning</text>
+  <text x="400" y="225" class="subtitle">for Fire Safety</text>
+  
+  <!-- Application boxes -->
+  <!-- Risk Assessment -->
+  <rect x="50" y="80" width="200" height="130" class="application-box risk-assessment" />
+  <text x="150" y="105" class="box-title">Risk Assessment &amp; Prediction</text>
+  <text x="150" y="135" class="box-text">🏢 Building fire risk classification</text>
+  <text x="150" y="155" class="box-text">🔥 Fire spread prediction models</text>
+  <text x="150" y="175" class="box-text">🗺️ Urban fire risk mapping</text>
+  <text x="150" y="195" class="algorithm">(Random Forest, Neural Networks)</text>
+  
+  <!-- Early Detection -->
+  <rect x="550" y="80" width="200" height="130" class="application-box detection" />
+  <text x="650" y="105" class="box-title">Early Detection &amp; Monitoring</text>
+  <text x="650" y="135" class="box-text">👁️ Computer vision for smoke/fire detection</text>
+  <text x="650" y="155" class="box-text">📊 Anomaly detection in sensor data</text>
+  <text x="650" y="175" class="box-text">🔄 Multi-sensor fusion for false alarm reduction</text>
+  <text x="650" y="195" class="algorithm">(CNN, Anomaly Detection Algorithms)</text>
+  
+  <!-- Evacuation Planning -->
+  <rect x="550" y="300" width="200" height="130" class="application-box evacuation" />
+  <text x="650" y="325" class="box-title">Evacuation &amp; Response Planning</text>
+  <text x="650" y="355" class="box-text">🚪 Dynamic evacuation route optimization</text>
+  <text x="650" y="375" class="box-text">👥 Crowd behavior prediction</text>
+  <text x="650" y="395" class="box-text">⏱️ Emergency response time estimation</text>
+  <text x="650" y="415" class="algorithm">(Reinforcement Learning, Graph Algorithms)</text>
+  
+  <!-- Maintenance -->
+  <rect x="50" y="300" width="200" height="130" class="application-box maintenance" />
+  <text x="150" y="325" class="box-title">Predictive Maintenance</text>
+  <text x="150" y="355" class="box-text">🔧 Fire safety equipment failure prediction</text>
+  <text x="150" y="375" class="box-text">💧 Sprinkler system health monitoring</text>
+  <text x="150" y="395" class="box-text">📅 Preventive maintenance scheduling</text>
+  <text x="150" y="415" class="algorithm">(Time Series Analysis, Classification)</text>
+  
+  <!-- Resource Optimization -->
+  <rect x="300" y="420" width="200" height="85" class="application-box resource" />
+  <text x="400" y="445" class="box-title">Resource Optimization</text>
+  <text x="400" y="470" class="box-text">🚒 Fire department resource allocation</text>
+  <text x="400" y="490" class="box-text">⚔️ Firefighting strategy optimization</text>
+  
+  <!-- Icons for each area -->
+  <circle cx="80" cy="105" r="15" fill="#F44336" />
+  <text x="80" y="112" class="icon" fill="white">⚠️</text>
+  
+  <circle cx="580" cy="105" r="15" fill="#FF9800" />
+  <text x="580" y="112" class="icon" fill="white">🔍</text>
+  
+  <circle cx="580" cy="325" r="15" fill="#2196F3" />
+  <text x="580" y="332" class="icon" fill="white">🚶</text>
+  
+  <circle cx="80" cy="325" r="15" fill="#4CAF50" />
+  <text x="80" y="332" class="icon" fill="white">🔧</text>
+  
+  <circle cx="330" cy="445" r="15" fill="#9C27B0" />
+  <text x="330" y="452" class="icon" fill="white">⚡</text>
+  
+  <!-- Connecting lines with improved styling -->
+  <path d="M 250 140 Q 290 160 320 180" stroke="#F44336" class="line" stroke-dasharray="0" />
+  <path d="M 550 140 Q 510 160 480 180" stroke="#FF9800" class="line" stroke-dasharray="0" />
+  <path d="M 550 360 Q 510 300 480 240" stroke="#2196F3" class="line" stroke-dasharray="0" />
+  <path d="M 250 360 Q 290 300 320 240" stroke="#4CAF50" class="line" stroke-dasharray="0" />
+  <path d="M 400 420 L 400 290" stroke="#9C27B0" class="line" stroke-dasharray="0" />
+  
+  <!-- Footer -->
+  <rect x="150" y="510" width="500" height="1" stroke="#999" stroke-width="1" />
+  <text x="400" y="515" class="footer-text">Integrated approach combining various ML techniques for comprehensive fire safety systems</text>
+</svg>

@@ -1,0 +1,790 @@
+
+    with example_tabs[2]:
+        st.markdown('<div class="example-container example-3">', unsafe_allow_html=True)
+        st.header("Optimal Evacuation Route Planning")
+        
+        # Custom CSS for enhanced visualization
+        st.markdown('''
+        <style>
+        .evacuation-stats {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #4CAF50;
+        }
+        .route-info {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .route-icon {
+            font-size: 24px;
+            margin-right: 10px;
+            color: #2196F3;
+        }
+        .risk-level {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            text-align: center;
+            margin: 5px 0;
+            width: 100%;
+            color: white;
+        }
+        .risk-low {
+            background-color: #4CAF50;
+        }
+        .risk-medium {
+            background-color: #FF9800;
+        }
+        .risk-high {
+            background-color: #F44336;
+        }
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            background-color: #FF5722;
+            color: white;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .building-animation {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 15px 0;
+        }
+        .algorithm-selector {
+            background-color: #f1f8e9;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #8bc34a;
+        }
+        </style>
+        ''', unsafe_allow_html=True)
+        
+        col1, col2 = st.columns([2, 1])
+        
+        with col1:
+            st.write('''
+            <div style="font-size: 1.1em; line-height: 1.5;">
+            This example demonstrates how <strong>reinforcement learning</strong> can be used to determine optimal evacuation
+            routes in buildings during emergencies, adapting to changing conditions like blocked exits or smoke-filled corridors.
+            </div>
+            ''', unsafe_allow_html=True)
+        
+        with col2:
+            st.markdown('''
+            <div style="background-color: #FFF3E0; padding: 10px; border-radius: 5px; border-left: 4px solid #FF9800;">
+            <strong>🔎 Application Domain:</strong><br>
+            • High-rise buildings<br>
+            • Shopping malls<br>
+            • Hospitals<br>
+            • Industrial facilities
+            </div>
+            ''', unsafe_allow_html=True)
+        
+        # Building layout visualization
+        st.subheader("🏢 Interactive Building Layout Simulation")
+        
+        # Building type selection
+        building_type = st.radio(
+            "Select Building Type:",
+            ["Office Building", "Shopping Mall", "Industrial Facility"],
+            horizontal=True
+        )
+        
+        # Create building layout based on selected type
+        if building_type == "Office Building":
+            layout_width, layout_height = 9, 9
+            layout = np.ones((layout_height, layout_width))
+            
+            # Outer walls
+            layout[0, :] = 0  # Top wall
+            layout[-1, :] = 0  # Bottom wall
+            layout[:, 0] = 0  # Left wall
+            layout[:, -1] = 0  # Right wall
+            
+            # Inner walls - office layout
+            layout[2, 1:6] = 0  # Horizontal corridor wall
+            layout[6, 2:8] = 0  # Horizontal corridor wall
+            layout[1:7, 4] = 0  # Vertical wall with door
+            layout[5, 4] = 1    # Door in vertical wall
+            
+            # Conference room
+            layout[3:6, 6:8] = 0  # Room walls
+            layout[4, 6] = 1      # Room door
+            
+            # Add exits
+            exit_positions = [(layout_height-1, 2), (layout_height-1, 7)]
+            
+            # Add starting point
+            start_position = (1, 2)
+            
+        elif building_type == "Shopping Mall":
+            layout_width, layout_height = 10, 10
+            layout = np.ones((layout_height, layout_width))
+            
+            # Outer walls
+            layout[0, :] = 0  # Top wall
+            layout[-1, :] = 0  # Bottom wall
+            layout[:, 0] = 0  # Left wall
+            layout[:, -1] = 0  # Right wall
+            
+            # Inner walls - mall layout
+            layout[3, 1:9] = 0  # Top corridor
+            layout[7, 1:9] = 0  # Bottom corridor
+            layout[3:8, 3] = 0  # Left stores wall
+            layout[3:8, 6] = 0  # Right stores wall
+            
+            # Entrances to stores
+            layout[5, 3] = 1  # Left store entrance
+            layout[5, 6] = 1  # Right store entrance
+            
+            # Add exits
+            exit_positions = [(layout_height-1, 2), (layout_height-1, 8)]
+            
+            # Add starting point
+            start_position = (2, 5)
+            
+        else:  # Industrial Facility
+            layout_width, layout_height = 10, 10
+            layout = np.ones((layout_height, layout_width))
+            
+            # Outer walls
+            layout[0, :] = 0  # Top wall
+            layout[-1, :] = 0  # Bottom wall
+            layout[:, 0] = 0  # Left wall
+            layout[:, -1] = 0  # Right wall
+            
+            # Inner walls - industrial layout
+            layout[2, 1:8] = 0    # Upper area partition
+            layout[2, 3] = 1      # Door in upper partition
+            layout[4:8, 2] = 0    # Vertical partition
+            layout[6, 2:9] = 0    # Lower horizontal partition
+            layout[6, 5] = 1      # Door in lower partition
+            
+            # Machinery/hazard areas
+            layout[3:5, 6:9] = 0  # Enclosed machinery room
+            layout[4, 6] = 1      # Door to machinery
+            
+            # Add exits
+            exit_positions = [(layout_height-1, 1), (layout_height-1, 8)]
+            
+            # Add starting point
+            start_position = (1, 5)
+        
+        # Mark exits and starting point in layout
+        for x, y in exit_positions:
+            layout[x, y] = 2
+            
+        layout[start_position] = 3
+        
+        # Add fire/hazard with more options
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            fire_position = st.selectbox(
+                "Select fire/hazard location:",
+                options=["No Hazard", "Near Exit 1", "Building Center", "Near Start Position", "Multiple Hazards"]
+            )
+        
+        with col2:
+            hazard_type = st.selectbox(
+                "Select hazard type:",
+                options=["Fire", "Smoke", "Chemical Spill", "Structural Damage"]
+            )
+        
+        # Add hazards to layout based on selection
+        if fire_position == "Near Exit 1":
+            if building_type == "Office Building":
+                layout[layout_height-2, 1:4] = 4
+            elif building_type == "Shopping Mall":
+                layout[layout_height-2, 1:4] = 4
+                layout[layout_height-3, 2] = 4
+            else:
+                layout[layout_height-2, 1] = 4
+                layout[layout_height-3, 1] = 4
+                layout[layout_height-2, 2] = 4
+        elif fire_position == "Building Center":
+            if building_type == "Office Building":
+                layout[4, 3:6] = 4
+                layout[5, 4] = 4
+            elif building_type == "Shopping Mall":
+                layout[5, 4:7] = 4
+                layout[4, 5] = 4
+                layout[6, 5] = 4
+            else:
+                layout[4, 4:7] = 4
+                layout[5, 5] = 4
+        elif fire_position == "Near Start Position":
+            if building_type == "Office Building":
+                layout[1, 3] = 4
+                layout[2, 2] = 4
+                layout[2, 3] = 4
+            elif building_type == "Shopping Mall":
+                layout[2, 4:7] = 4
+                layout[1, 5] = 4
+            else:
+                layout[2, 4:7] = 4
+                layout[1, 5] = 4
+        elif fire_position == "Multiple Hazards":
+            if building_type == "Office Building":
+                layout[layout_height-2, 2] = 4  # Near exit
+                layout[3, 2] = 4                # Mid building
+                layout[1, 5] = 4                # Far corner
+            elif building_type == "Shopping Mall":
+                layout[layout_height-2, 2] = 4  # Near exit
+                layout[5, 5] = 4                # Center
+                layout[2, 8] = 4                # Upper right
+            else:
+                layout[layout_height-2, 1] = 4  # Near exit
+                layout[3, 3] = 4                # Upper left
+                layout[5, 8] = 4                # Right side
+        
+        # Hazard icon based on type
+        hazard_icon = "🔥" if hazard_type == "Fire" else "💨" if hazard_type == "Smoke" else "☣️" if hazard_type == "Chemical Spill" else "💥"
+        
+        # Create a visualization container with border
+        st.markdown('<div class="building-animation">', unsafe_allow_html=True)
+        
+        # Create layout visualization
+        fig, ax = plt.subplots(figsize=(12, 12))
+        
+        # Apply fire safety theme to matplotlib
+        fig, ax = apply_firesafety_theme_to_matplotlib(ax, f"{building_type} Layout", figsize=(12, 12))
+        
+        # Custom color scheme based on hazard type
+        if hazard_type == "Fire":
+            hazard_color = FIRESAFETY_COLORS['primary']  # Red for fire
+        elif hazard_type == "Smoke":
+            hazard_color = "#607D8B"  # Blue-grey for smoke
+        elif hazard_type == "Chemical Spill":
+            hazard_color = "#8BC34A"  # Green for chemical
+        else:
+            hazard_color = "#795548"  # Brown for structural damage
+        
+        # Use enhanced color scheme for better visualization
+        colors = [
+            FIRESAFETY_COLORS['text'],           # walls = black/dark
+            FIRESAFETY_COLORS['background'],     # paths = white/light
+            FIRESAFETY_COLORS['secondary'],      # exits = green
+            FIRESAFETY_COLORS['tertiary'],       # start = blue
+            hazard_color                         # hazard = varies by type
+        ]
+        cmap = plt.matplotlib.colors.ListedColormap(colors)
+        
+        # Create the heatmap with improved styling
+        heatmap = ax.imshow(layout, cmap=cmap, interpolation='nearest')
+        
+        # Add grid for clarity
+        ax.set_xticks(np.arange(-.5, layout_width, 1), minor=True)
+        ax.set_yticks(np.arange(-.5, layout_height, 1), minor=True)
+        ax.grid(which='minor', color='#CCCCCC', linestyle='-', linewidth=1.5)
+        
+        # Remove axis labels
+        ax.set_xticks([])
+        ax.set_yticks([])
+        
+        # Add improved annotations with building-specific elements
+        for i in range(layout_height):
+            for j in range(layout_width):
+                if layout[i, j] == 2:
+                    ax.text(j, i, "EXIT", ha='center', va='center', color='white', 
+                           fontweight='bold', fontsize=9, bbox=dict(boxstyle="round,pad=0.3", 
+                                                                  fc=FIRESAFETY_COLORS['secondary'], 
+                                                                  ec="white", lw=1, alpha=0.9))
+                elif layout[i, j] == 3:
+                    ax.text(j, i, "YOU", ha='center', va='center', color='white', 
+                           fontweight='bold', fontsize=9, bbox=dict(boxstyle="round,pad=0.3", 
+                                                                  fc=FIRESAFETY_COLORS['tertiary'], 
+                                                                  ec="white", lw=1, alpha=0.9))
+                elif layout[i, j] == 4:
+                    ax.text(j, i, hazard_icon, ha='center', va='center', fontsize=18)
+                
+                # Add room labels for different building types
+                if building_type == "Office Building":
+                    if (i, j) == (1, 6):
+                        ax.text(j, i, "Office", ha='center', va='center', color='#555', fontsize=8)
+                    elif (i, j) == (4, 7):
+                        ax.text(j, i, "Meeting\nRoom", ha='center', va='center', color='#555', fontsize=8)
+                    elif (i, j) == (3, 2):
+                        ax.text(j, i, "Office", ha='center', va='center', color='#555', fontsize=8)
+                elif building_type == "Shopping Mall":
+                    if (i, j) == (5, 2):
+                        ax.text(j, i, "Store", ha='center', va='center', color='#555', fontsize=8)
+                    elif (i, j) == (5, 8):
+                        ax.text(j, i, "Store", ha='center', va='center', color='#555', fontsize=8)
+                    elif (i, j) == (2, 5):
+                        ax.text(j, i, "Food\nCourt", ha='center', va='center', color='#555', fontsize=8)
+                elif building_type == "Industrial Facility":
+                    if (i, j) == (1, 3):
+                        ax.text(j, i, "Control\nRoom", ha='center', va='center', color='#555', fontsize=8)
+                    elif (i, j) == (4, 7):
+                        ax.text(j, i, "Machinery", ha='center', va='center', color='#555', fontsize=8)
+                    elif (i, j) == (8, 5):
+                        ax.text(j, i, "Storage", ha='center', va='center', color='#555', fontsize=8)
+        
+        # Add a legend
+        legend_elements = [
+            plt.Line2D([0], [0], marker='s', color='w', label='Walls', 
+                      markerfacecolor=FIRESAFETY_COLORS['text'], markersize=10),
+            plt.Line2D([0], [0], marker='s', color='w', label='Paths', 
+                      markerfacecolor=FIRESAFETY_COLORS['background'], markersize=10),
+            plt.Line2D([0], [0], marker='s', color='w', label='Exits', 
+                      markerfacecolor=FIRESAFETY_COLORS['secondary'], markersize=10),
+            plt.Line2D([0], [0], marker='s', color='w', label='Your Location', 
+                      markerfacecolor=FIRESAFETY_COLORS['tertiary'], markersize=10),
+            plt.Line2D([0], [0], marker='s', color='w', label=f'{hazard_type} Hazard', 
+                      markerfacecolor=hazard_color, markersize=10),
+        ]
+        ax.legend(handles=legend_elements, loc='upper center', bbox_to_anchor=(0.5, 1.05), 
+                 ncol=5, frameon=True, fancybox=True, shadow=True)
+        
+        # Add a title with enhanced styling
+        building_info = {
+            "Office Building": "3-story Office Building (Floor 2)",
+            "Shopping Mall": "Large Shopping Mall (Main Floor)",
+            "Industrial Facility": "Manufacturing Plant (Production Floor)"
+        }
+        ax.set_title(f"{building_info[building_type]} - Emergency Layout", 
+                    fontsize=16, color=FIRESAFETY_COLORS['text'], fontweight='bold', pad=20)
+        
+        # Display the visualization
+        st.pyplot(fig)
+        
+        # End of building animation container
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Algorithm selection with enhanced styling
+        st.markdown('<div class="algorithm-selector">', unsafe_allow_html=True)
+        st.subheader("🧠 AI Evacuation Planning System")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            selected_algorithm = st.selectbox(
+                "Select AI Routing Algorithm:",
+                ["Q-Learning", "Deep Q-Network (DQN)", "A* Pathfinding", "Monte Carlo Tree Search"]
+            )
+            
+        with col2:
+            optimization_goal = st.selectbox(
+                "Optimization Goal:",
+                ["Shortest Path", "Lowest Risk", "Balanced (Time/Risk)", "Maximum Survivability"]
+            )
+        
+        # Description of selected algorithm
+        algorithm_descriptions = {
+            "Q-Learning": "A reinforcement learning algorithm that learns the value of actions in states by learning a Q-function that assigns expected utility to state-action pairs.",
+            "Deep Q-Network (DQN)": "An extension of Q-learning that uses neural networks to approximate the Q-function, allowing it to handle more complex environments.",
+            "A* Pathfinding": "A best-first search algorithm that finds the shortest path between nodes using a heuristic function to guide the search.",
+            "Monte Carlo Tree Search": "A heuristic search algorithm that builds a search tree through random sampling of the decision space."
+        }
+        
+        st.info(f"**Algorithm Description**: {algorithm_descriptions[selected_algorithm]}")
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Evacuation route calculation with animation
+        st.subheader("🚶 Optimal Evacuation Route Planning")
+        
+        # Add interactive parameters
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            population_density = st.slider("Population Density", 0, 100, 50, 
+                                           help="Higher density may impact evacuation speed and route selection")
+        
+        with col2:
+            mobility_factor = st.slider("Mobility Constraints", 0, 100, 20, 
+                                        help="Higher values represent more people with mobility limitations")
+        
+        with col3:
+            panic_level = st.slider("Estimated Panic Level", 0, 100, 30, 
+                                   help="Higher panic levels may reduce optimal path-following")
+        
+        # Simulate computation with spinner
+        with st.spinner(f"Computing optimal evacuation routes using {selected_algorithm}..."):
+            
+            # Generate evacuation path based on selected options
+            route = []
+            current = start_position
+            
+            # Choose exit based on hazard location and building type
+            target_exit = exit_positions[0]  # Default to first exit
+            
+            # Path generation logic based on hazard location
+            if fire_position == "No Hazard":
+                # Simple path logic - find closest exit
+                if abs(start_position[0] - exit_positions[0][0]) + abs(start_position[1] - exit_positions[0][1]) >                    abs(start_position[0] - exit_positions[1][0]) + abs(start_position[1] - exit_positions[1][1]):
+                    target_exit = exit_positions[1]
+                else:
+                    target_exit = exit_positions[0]
+                    
+            elif fire_position == "Near Exit 1":
+                # Use second exit to avoid hazard
+                target_exit = exit_positions[1]
+                
+            elif fire_position in ["Building Center", "Multiple Hazards"]:
+                # Choose exit based on building type and optimization goal
+                if optimization_goal == "Lowest Risk":
+                    target_exit = exit_positions[1] if building_type == "Office Building" else exit_positions[0]
+                else:
+                    # For shortest path, determine nearest unobstructed exit
+                    if abs(start_position[0] - exit_positions[0][0]) < abs(start_position[0] - exit_positions[1][0]):
+                        target_exit = exit_positions[0]
+                    else:
+                        target_exit = exit_positions[1]
+                
+            else:  # Near Start Position
+                # Move away from start to less hazardous exit
+                if building_type == "Office Building":
+                    target_exit = exit_positions[0]
+                else:
+                    target_exit = exit_positions[1]
+            
+            # Generate paths for different building types
+            if building_type == "Office Building":
+                # Generate different paths based on target exit
+                if target_exit == exit_positions[0]:  # Exit on the left
+                    if fire_position == "Near Start Position":
+                        # Detour around fire
+                        route = [start_position, (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), 
+                                (6, 1), (7, 1), (7, 2), (8, 2)]
+                    elif fire_position == "Building Center":
+                        # Go around the center
+                        route = [start_position, (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), 
+                                (6, 1), (7, 1), (7, 2), (8, 2)]
+                    else:
+                        # Direct path to exit
+                        route = [start_position, (2, 2), (3, 2), (4, 2), (5, 2), (6, 2), 
+                                (7, 2), (8, 2)]
+                else:  # Exit on the right
+                    if fire_position == "Near Start Position":
+                        # Path avoiding the hazard
+                        route = [start_position, (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), 
+                                (1, 6), (1, 7), (2, 7), (3, 7), (4, 7), (5, 7), 
+                                (6, 7), (7, 7), (8, 7)]
+                    elif fire_position == "Building Center":
+                        # Path avoiding center hazard
+                        route = [start_position, (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), 
+                                (2, 7), (3, 7), (4, 7), (5, 7), (6, 7), (7, 7), (8, 7)]
+                    else:
+                        # Direct path through office area
+                        route = [start_position, (1, 3), (1, 4), (1, 5), (1, 6), (1, 7),
+                                (2, 7), (3, 7), (4, 7), (5, 7), (6, 7), (7, 7), (8, 7)]
+                                
+            elif building_type == "Shopping Mall":
+                # Generate different paths based on target exit
+                if target_exit == exit_positions[0]:  # Left exit
+                    if fire_position == "Multiple Hazards":
+                        route = [start_position, (2, 4), (2, 3), (2, 2), (2, 1), (3, 1), 
+                                (4, 1), (5, 1), (6, 1), (7, 1), (8, 1), (8, 2), (9, 2)]
+                    elif fire_position == "Building Center":
+                        route = [start_position, (2, 4), (2, 3), (2, 2), (2, 1), (3, 1), 
+                                (4, 1), (5, 1), (6, 1), (7, 1), (8, 1), (8, 2), (9, 2)]
+                    else:
+                        route = [start_position, (3, 5), (4, 5), (5, 5), (6, 5), (7, 5), 
+                                (8, 5), (8, 4), (8, 3), (8, 2), (9, 2)]
+                else:  # Right exit
+                    if fire_position == "Near Start Position":
+                        route = [start_position, (2, 4), (2, 3), (2, 2), (2, 1), (3, 1), 
+                                (4, 1), (5, 1), (6, 1), (7, 1), (8, 1), (8, 2), (8, 3), 
+                                (8, 4), (8, 5), (8, 6), (8, 7), (8, 8), (9, 8)]
+                    else:
+                        route = [start_position, (3, 5), (4, 5), (5, 5), (6, 5), (7, 5), 
+                                (8, 5), (8, 6), (8, 7), (8, 8), (9, 8)]
+                                
+            else:  # Industrial Facility
+                # Generate different paths based on target exit
+                if target_exit == exit_positions[0]:  # Left exit
+                    if fire_position == "Near Start Position":
+                        route = [start_position, (1, 4), (1, 3), (2, 3), (3, 3), (4, 3), 
+                                (5, 3), (5, 2), (5, 1), (6, 1), (7, 1), (8, 1), (9, 1)]
+                    else:
+                        route = [start_position, (1, 4), (1, 3), (1, 2), (1, 1), (2, 1), 
+                                (3, 1), (4, 1), (5, 1), (6, 1), (7, 1), (8, 1), (9, 1)]
+                else:  # Right exit
+                    if fire_position == "Building Center":
+                        route = [start_position, (1, 6), (1, 7), (1, 8), (2, 8), (3, 8), 
+                                (4, 8), (5, 8), (6, 5), (7, 5), (8, 5), (8, 6), (8, 7), 
+                                (8, 8), (9, 8)]
+                    else:
+                        route = [start_position, (1, 6), (1, 7), (1, 8), (2, 8), (3, 8), 
+                                (4, 8), (5, 8), (6, 8), (7, 8), (8, 8), (9, 8)]
+        
+        # Create evacuation path visualization with animation
+        path_layout = layout.copy()
+        for x, y in route:
+            # Don't override start, exit or fire cells
+            if path_layout[x, y] not in [2, 3, 4]:
+                path_layout[x, y] = 5
+        
+        # Create enhanced visualization for the route
+        fig2, ax2 = plt.subplots(figsize=(12, 12))
+        
+        # Apply enhanced theme
+        fig2, ax2 = apply_firesafety_theme_to_matplotlib(ax2, "AI-Generated Evacuation Route", figsize=(12, 12))
+        
+        # Extended color map with path
+        route_color = FIRESAFETY_SEQUENTIAL[3]  # Default blue path
+        if optimization_goal == "Lowest Risk":
+            route_color = "#4CAF50"  # Green for safety-optimized
+        elif optimization_goal == "Maximum Survivability":
+            route_color = "#673AB7"  # Purple for survivability focus
+            
+        extended_colors = colors + [route_color]  # Add path color
+        path_cmap = plt.matplotlib.colors.ListedColormap(extended_colors)
+        
+        heatmap2 = ax2.imshow(path_layout, cmap=path_cmap, interpolation='nearest')
+        
+        # Add grid for clarity
+        ax2.set_xticks(np.arange(-.5, layout_width, 1), minor=True)
+        ax2.set_yticks(np.arange(-.5, layout_height, 1), minor=True)
+        ax2.grid(which='minor', color='#CCCCCC', linestyle='-', linewidth=1.5)
+        
+        # Remove axis labels
+        ax2.set_xticks([])
+        ax2.set_yticks([])
+        
+        # Add enhanced legends with optimization goal information
+        legend_title = f"AI-Optimized for: {optimization_goal}"
+        legend_elements = [
+            plt.Line2D([0], [0], marker='s', color='w', label='Walls', 
+                     markerfacecolor=FIRESAFETY_COLORS['text'], markersize=10),
+            plt.Line2D([0], [0], marker='s', color='w', label='Available Paths', 
+                     markerfacecolor=FIRESAFETY_COLORS['background'], markersize=10),
+            plt.Line2D([0], [0], marker='s', color='w', label='Emergency Exits', 
+                     markerfacecolor=FIRESAFETY_COLORS['secondary'], markersize=10),
+            plt.Line2D([0], [0], marker='s', color='w', label='Your Location', 
+                     markerfacecolor=FIRESAFETY_COLORS['tertiary'], markersize=10),
+            plt.Line2D([0], [0], marker='s', color='w', label=f'{hazard_type} Hazard', 
+                     markerfacecolor=hazard_color, markersize=10),
+            plt.Line2D([0], [0], marker='s', color='w', label='AI-Generated Route', 
+                     markerfacecolor=route_color, markersize=10),
+        ]
+        
+        ax2.legend(handles=legend_elements, loc='upper center', bbox_to_anchor=(0.5, 1.05), 
+                  ncol=3, frameon=True, fancybox=True, shadow=True, title=legend_title)
+        
+        # Enhanced annotations
+        for i in range(layout_height):
+            for j in range(layout_width):
+                if path_layout[i, j] == 2:
+                    ax2.text(j, i, "EXIT", ha='center', va='center', color='white', 
+                            fontweight='bold', fontsize=9, bbox=dict(boxstyle="round,pad=0.3", 
+                                                                   fc=FIRESAFETY_COLORS['secondary'], 
+                                                                   ec="white", lw=1, alpha=0.9))
+                elif path_layout[i, j] == 3:
+                    ax2.text(j, i, "YOU", ha='center', va='center', color='white', 
+                            fontweight='bold', fontsize=9, bbox=dict(boxstyle="round,pad=0.3", 
+                                                                   fc=FIRESAFETY_COLORS['tertiary'], 
+                                                                   ec="white", lw=1, alpha=0.9))
+                elif path_layout[i, j] == 4:
+                    ax2.text(j, i, hazard_icon, ha='center', va='center', fontsize=18)
+                elif path_layout[i, j] == 5:
+                    # Show direction with arrows on path and number steps
+                    if (i, j) in route[:-1]:  # Skip the last point
+                        idx = route.index((i, j))
+                        next_i, next_j = route[idx + 1]
+                        
+                        # Determine arrow direction
+                        if next_i > i:
+                            arrow = "↓"  # Down
+                        elif next_i < i:
+                            arrow = "↑"  # Up
+                        elif next_j > j:
+                            arrow = "→"  # Right
+                        else:
+                            arrow = "←"  # Left
+                            
+                        # Add step numbers on every third step for better readability
+                        if idx % 3 == 0:
+                            step_number = idx + 1
+                            ax2.text(j, i, f"{step_number}", ha='center', va='center', color='white', 
+                                fontsize=8, fontweight='bold', bbox=dict(boxstyle="circle", 
+                                                                    fc=FIRESAFETY_COLORS['tertiary'], 
+                                                                    ec="white", alpha=0.8))
+                        else:
+                            ax2.text(j, i, arrow, ha='center', va='center', color='black', 
+                                fontweight='bold', fontsize=14)
+        
+        # Special marking for the destination exit
+        i, j = target_exit
+        ax2.add_patch(plt.Rectangle((j-0.5, i-0.5), 1, 1, fill=False, edgecolor='white', linewidth=3, linestyle='--'))
+        
+        # Apply title
+        algo_display_name = selected_algorithm
+        if selected_algorithm == "A* Pathfinding":
+            algo_display_name = "A* Algorithm"
+        elif selected_algorithm == "Monte Carlo Tree Search":
+            algo_display_name = "MCTS Algorithm"
+            
+        ax2.set_title(f"Optimal Evacuation Route \nGenerated with {algo_display_name}", 
+                     fontsize=16, color=FIRESAFETY_COLORS['text'], fontweight='bold', pad=20)
+        
+        # Display the enhanced route visualization
+        st.pyplot(fig2)
+        
+        # Enhanced evacuation statistics with styled container
+        st.markdown('<div class="evacuation-stats">', unsafe_allow_html=True)
+        st.subheader("📊 Evacuation Analytics & Statistics")
+        
+        # Calculate statistics
+        path_length = len(route)
+        avg_step_time = 1.5 + (mobility_factor / 100)  # Base time adjusted by mobility
+        crowd_factor = 1 + (population_density / 200)  # Crowd slowing factor
+        panic_factor = 1 + (panic_level / 200)        # Panic slowing factor
+        
+        estimated_time = path_length * avg_step_time * crowd_factor * panic_factor
+        estimated_time = round(estimated_time, 1)
+        
+        # Risk calculations
+        base_risk_score = 10  # Base risk
+        
+        # Increase risk based on hazards
+        if fire_position == "No Hazard":
+            risk_score = base_risk_score
+            risk_level = "Low"
+            risk_color = "risk-low"
+        elif fire_position == "Near Exit 1":
+            risk_score = base_risk_score + 10 + (panic_level / 10)
+            risk_level = "Medium"
+            risk_color = "risk-medium"
+        elif fire_position == "Multiple Hazards":
+            risk_score = base_risk_score + 25 + (panic_level / 5)
+            risk_level = "High"
+            risk_color = "risk-high" 
+        else:
+            risk_score = base_risk_score + 15 + (panic_level / 8)
+            risk_level = "Medium"
+            risk_color = "risk-medium"
+            
+        # Adjust risk based on algorithm and goal
+        if optimization_goal == "Lowest Risk":
+            risk_score = risk_score * 0.7  # Reduce risk
+        elif optimization_goal == "Maximum Survivability":
+            risk_score = risk_score * 0.8  # Somewhat reduce risk
+            
+        risk_score = round(risk_score, 1)
+        
+        # Mortality risk
+        mortality_risk = risk_score / 4  # Convert to percentage, cap at 25%
+        mortality_risk = min(25, mortality_risk)
+        
+        # Calculate survivability 
+        survivability = 100 - mortality_risk
+        
+        # Statistics display with 3 columns
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.markdown('<div class="route-info">', unsafe_allow_html=True)
+            st.markdown('<span class="route-icon">🛣️</span>', unsafe_allow_html=True)
+            st.markdown(f'<div><span style="font-size: 24px; font-weight: bold;">{path_length}</span><br>Total Steps in Path</div>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+        with col2:
+            st.markdown('<div class="route-info">', unsafe_allow_html=True)
+            st.markdown('<span class="route-icon">⏱️</span>', unsafe_allow_html=True)
+            st.markdown(f'<div><span style="font-size: 24px; font-weight: bold;">{estimated_time}</span><br>Est. Evacuation Time (sec)</div>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+        with col3:
+            st.markdown(f'<div class="risk-level {risk_color}">Risk Level: {risk_level}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="margin-top: 5px;">Risk Score: {risk_score} / 50</div>', unsafe_allow_html=True)
+            
+        # Add advanced statistics
+        st.markdown("<hr style='margin: 15px 0; opacity: 0.3;'>", unsafe_allow_html=True)
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            # Show survivability with progress bar
+            st.markdown(f'<div style="margin-bottom: 5px;"><strong>Survivability Rate:</strong> {survivability:.1f}%</div>', unsafe_allow_html=True)
+            survivability_color = "#4CAF50" if survivability > 90 else "#FF9800" if survivability > 75 else "#F44336"
+            st.markdown(f'''
+                <div style="background-color: #e0e0e0; border-radius: 10px; height: 10px; width: 100%;">
+                    <div style="background-color: {survivability_color}; width: {survivability}%; height: 100%; border-radius: 10px;"></div>
+                </div>
+            ''', unsafe_allow_html=True)
+            
+            # Environmental factors
+            st.markdown("<br><strong>Environmental Influence Factors:</strong>", unsafe_allow_html=True)
+            st.markdown(f"• Population Density Impact: +{(crowd_factor-1)*100:.1f}% evacuation time", unsafe_allow_html=True)
+            st.markdown(f"• Mobility Constraints Impact: +{(avg_step_time-1.5)/1.5*100:.1f}% per step", unsafe_allow_html=True)
+            
+        with col2:
+            # Route quality metrics
+            score_percentage = 0
+            if optimization_goal == "Shortest Path":
+                # Higher score for shorter paths
+                score_percentage = max(0, 100 - (path_length / 2))
+            elif optimization_goal == "Lowest Risk":
+                # Higher score for lower risk
+                score_percentage = max(0, 100 - (risk_score * 2))
+            elif optimization_goal == "Balanced (Time/Risk)":
+                # Balance of time and risk
+                score_percentage = max(0, 100 - (path_length / 4) - (risk_score))
+            else:  # Maximum Survivability
+                # Directly use survivability
+                score_percentage = survivability
+                
+            score_percentage = min(99, score_percentage)  # Cap at 99%
+            
+            st.markdown(f'<div style="margin-bottom: 5px;"><strong>Route Quality Score:</strong> {score_percentage:.1f}%</div>', unsafe_allow_html=True)
+            quality_color = "#4CAF50" if score_percentage > 75 else "#FF9800" if score_percentage > 50 else "#F44336"
+            st.markdown(f'''
+                <div style="background-color: #e0e0e0; border-radius: 10px; height: 10px; width: 100%;">
+                    <div style="background-color: {quality_color}; width: {score_percentage}%; height: 100%; border-radius: 10px;"></div>
+                </div>
+            ''', unsafe_allow_html=True)
+            
+            # Behavioral factors
+            st.markdown("<br><strong>Behavioral Influence Factors:</strong>", unsafe_allow_html=True)
+            st.markdown(f"• Panic Level Impact: +{(panic_factor-1)*100:.1f}% evacuation time", unsafe_allow_html=True)
+            st.markdown(f"• Crowding/Queuing at Exits: {'High' if population_density > 70 else 'Medium' if population_density > 40 else 'Low'}", unsafe_allow_html=True)
+                
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # How it works section with enhanced styling
+        st.subheader("🔍 How AI-Driven Evacuation Planning Works")
+        
+        # Steps with improved styling
+        st.markdown('''
+        <div style="background-color: #f9f9f9; padding: 15px; border-radius: 10px; margin-top: 15px;">
+            <p><span class="step-number">1</span> <strong>Building Modeling:</strong> The AI system creates a detailed digital twin of the building including walls, doors, stairwells, and exit points.</p>
+            
+            <p><span class="step-number">2</span> <strong>Sensor Integration:</strong> Real-time data from smoke detectors, heat sensors, CCTV cameras, and occupancy counters is continuously fed into the system.</p>
+            
+            <p><span class="step-number">3</span> <strong>Hazard Modeling:</strong> The AI analyzes sensor data to identify hazards and predict their spread pattern over time, creating a dynamic risk map.</p>
+            
+            <p><span class="step-number">4</span> <strong>Path Computation:</strong> Using reinforcement learning algorithms, the system calculates optimal evacuation routes that minimize risk, distance, and congestion.</p>
+            
+            <p><span class="step-number">5</span> <strong>Continuous Update:</strong> As conditions change, the AI adapts evacuation routes in real-time and pushes updates to emergency signage and mobile devices.</p>
+        </div>
+        ''', unsafe_allow_html=True)
+        
+        # Real-world applications
+        st.markdown('''
+        <div style="background-color: #E8F5E9; padding: 15px; border-radius: 10px; margin-top: 15px; border-left: 4px solid #4CAF50;">
+            <h4 style="margin-top: 0;">Real-World Applications</h4>
+            <ul style="margin-bottom: 0; padding-left: 20px;">
+                <li><strong>Smart Buildings</strong> - Dynamic evacuation guidance through LED pathways and mobile alerts</li>
+                <li><strong>Emergency Response Teams</strong> - AI-guided deployment to assist evacuations in high-risk areas</li>
+                <li><strong>Public Venues</strong> - Optimized crowd management during emergencies in stadiums, theaters, and conference centers</li>
+                <li><strong>Cruise Ships and Hotels</strong> - Personalized evacuation instructions for guests unfamiliar with the layout</li>
+            </ul>
+        </div>
+        ''', unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+    

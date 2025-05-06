@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ML FireSafetyTutor User Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 15px;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #FF5722;
+            border-bottom: 2px solid #FF5722;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #FF7043;
+            margin-top: 30px;
+            border-left: 5px solid #FF7043;
+            padding-left: 10px;
+        }
+        h3 {
+            color: #FF9800;
+            margin-top: 25px;
+        }
+        .section {
+            margin-bottom: 35px;
+            padding: 0 10px;
+        }
+        ul, ol {
+            padding-left: 25px;
+        }
+        .highlight {
+            background-color: #FFF3E0;
+            padding: 15px;
+            border-left: 5px solid #FF9800;
+            border-radius: 0 4px 4px 0;
+            margin: 15px 0;
+        }
+        .tip {
+            background-color: #E8F5E9;
+            padding: 15px;
+            border-left: 5px solid #4CAF50;
+            border-radius: 0 4px 4px 0;
+            margin: 15px 0;
+        }
+        .warning {
+            background-color: #FFEBEE;
+            padding: 15px;
+            border-left: 5px solid #F44336;
+            border-radius: 0 4px 4px 0;
+            margin: 15px 0;
+        }
+        .navigation {
+            font-weight: bold;
+        }
+        .code-example {
+            background-color: #F5F5F5;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .module-content {
+            background-color: #F9F9F9;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #FF9800;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .quiz-section {
+            background-color: #E3F2FD;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            border: 1px solid #BBDEFB;
+        }
+        .algorithm-comparison {
+            margin: 20px 0;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>ML FireSafetyTutor: Comprehensive User Guide</h1>
+    
+    <div class="section">
+        <h2>Getting Started</h2>
+        <p>Welcome to ML FireSafetyTutor, your comprehensive interactive learning platform for mastering machine learning techniques specifically applied to fire safety scenarios. This platform combines theoretical knowledge with practical implementations to enhance your understanding of how ML can revolutionize fire prevention, detection, and response strategies.</p>
+        
+        <div class="highlight">
+            <p><strong>Learning Philosophy:</strong> Our platform is designed based on the "learn by doing" approach. While we recommend following the modules in sequence to build your knowledge systematically, you're free to explore in any order based on your interests and prior experience.</p>
+        </div>
+        
+        <h3>Platform Overview</h3>
+        <p>ML FireSafetyTutor consists of:</p>
+        <ul>
+            <li><strong>Interactive Learning Modules</strong> - Structured content covering fundamental to advanced ML concepts</li>
+            <li><strong>Practical ML Examples</strong> - Real-world fire safety applications with interactive simulations</li>
+            <li><strong>Progress Tracking System</strong> - Personalized dashboard showing your learning journey</li>
+            <li><strong>Quizzes and Assessments</strong> - Knowledge checks after each module</li>
+            <li><strong>Code Implementation Exercises</strong> - Hands-on practice with Python programming</li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <h2>Navigation Guide</h2>
+        <p class="navigation">The platform is designed with intuitive navigation through the sidebar:</p>
+        <ul>
+            <li><strong>Dashboard</strong> - Central hub showing your progress, recommended next steps, and platform announcements</li>
+            <li><strong>Learning Progress</strong> - Detailed analytics of your learning journey, including time spent, completion percentages, and quiz scores</li>
+            <li><strong>Practical ML Examples</strong> - Interactive simulations demonstrating ML applications in fire safety scenarios</li>
+            <li><strong>Learning Modules</strong> - Educational content organized into specialized topics with progress indicators</li>
+        </ul>
+        
+        <div class="tip">
+            <p><strong>Navigation Tip:</strong> Use the breadcrumb navigation at the top of each page to easily track your location within the platform and move between related sections.</p>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Learning Modules: Detailed Overview</h2>
+        <p>Each module is carefully structured to build your knowledge progressively:</p>
+        
+        <h3>1. Introduction to ML in Fire Safety</h3>
+        <div class="module-content">
+            <p>This foundational module introduces the intersection of machine learning and fire safety:</p>
+            <ul>
+                <li><strong>Historical Context</strong> - Evolution of fire safety technologies and the emergence of ML applications</li>
+                <li><strong>Key ML Concepts</strong> - Supervised vs. unsupervised learning, classification vs. regression, model training and validation</li>
+                <li><strong>Fire Safety Data Types</strong> - Sensor readings, visual data, time series, structural information</li>
+                <li><strong>Ethical Considerations</strong> - Balancing automation with human oversight in safety-critical systems</li>
+            </ul>
+            <p>You'll explore how different ML paradigms align with various fire safety challenges and understand when to apply specific approaches.</p>
+        </div>
+        
+        <h3>2. Data Preparation and Processing</h3>
+        <div class="module-content">
+            <p>Learn essential techniques for preparing fire safety data for ML applications:</p>
+            <ul>
+                <li><strong>Data Collection Methods</strong> - Sensor networks, IoT devices, historical records, simulation data</li>
+                <li><strong>Preprocessing Techniques</strong> - Handling missing values, outlier detection, smoothing sensor readings</li>
+                <li><strong>Feature Engineering</strong> - Creating meaningful features from raw fire sensor data</li>
+                <li><strong>Data Augmentation</strong> - Techniques for expanding limited fire incident datasets</li>
+                <li><strong>Temporal Data Handling</strong> - Working with time series from continuous monitoring systems</li>
+            </ul>
+            
+            <div class="code-example">
+                <p># Example: Preprocessing temperature sensor data</p>
+                <p>def preprocess_temperature_data(df):</p>
+                <p>    # Remove outliers using IQR method</p>
+                <p>    Q1 = df['temperature'].quantile(0.25)</p>
+                <p>    Q3 = df['temperature'].quantile(0.75)</p>
+                <p>    IQR = Q3 - Q1</p>
+                <p>    df_filtered = df[(df['temperature'] >= Q1 - 1.5*IQR) & (df['temperature'] <= Q3 + 1.5*IQR)]</p>
+                <p>    </p>
+                <p>    # Normalize temperature values</p>
+                <p>    df_filtered['temp_normalized'] = (df_filtered['temperature'] - df_filtered['temperature'].mean()) / df_filtered['temperature'].std()</p>
+                <p>    </p>
+                <p>    # Create features for rate of change</p>
+                <p>    df_filtered['temp_change_rate'] = df_filtered['temperature'].diff() / df_filtered['timestamp'].diff().dt.total_seconds()</p>
+                <p>    </p>
+                <p>    return df_filtered</p>
+            </div>
+        </div>
+        
+        <h3>3. Supervised Learning Algorithms</h3>
+        <div class="module-content">
+            <p>Explore algorithms that excel at classification and regression tasks in fire safety:</p>
+            <ul>
+                <li><strong>Classification Models</strong> - Logistic regression, decision trees, random forests, SVM for fire risk categorization</li>
+                <li><strong>Regression Models</strong> - Linear regression, polynomial regression, regression trees for predicting fire parameters</li>
+                <li><strong>Ensemble Methods</strong> - Boosting and bagging techniques for improved fire detection accuracy</li>
+                <li><strong>Model Selection</strong> - Choosing the right algorithm based on fire safety application requirements</li>
+            </ul>
+            
+            <div class="algorithm-comparison">
+                <table>
+                    <tr>
+                        <th>Algorithm</th>
+                        <th>Fire Safety Application</th>
+                        <th>Strengths</th>
+                        <th>Limitations</th>
+                    </tr>
+                    <tr>
+                        <td>Decision Trees</td>
+                        <td>Fire risk classification</td>
+                        <td>Interpretable, handles mixed data types</td>
+                        <td>Prone to overfitting</td>
+                    </tr>
+                    <tr>
+                        <td>Random Forest</td>
+                        <td>Equipment failure prediction</td>
+                        <td>High accuracy, robust to noise</td>
+                        <td>Less interpretable than single trees</td>
+                    </tr>
+                    <tr>
+                        <td>SVM</td>
+                        <td>Anomaly detection in sensor readings</td>
+                        <td>Effective with high-dimensional data</td>
+                        <td>Sensitive to parameter selection</td>
+                    </tr>
+                    <tr>
+                        <td>Gradient Boosting</td>
+                        <td>Fire spread prediction</td>
+                        <td>Superior predictive performance</td>
+                        <td>Computationally intensive</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <h3>4. Unsupervised Learning Algorithms</h3>
+        <div class="module-content">
+            <p>Discover pattern recognition techniques for unlabeled fire safety data:</p>
+            <ul>
+                <li><strong>Clustering Techniques</strong> - K-means, hierarchical clustering, DBSCAN for grouping similar fire incidents</li>
+                <li><strong>Dimensionality Reduction</strong> - PCA, t-SNE for visualizing complex fire sensor data</li>
+                <li><strong>Anomaly Detection</strong> - Isolation forests, one-class SVM for identifying unusual fire hazard patterns</li>
+                <li><strong>Association Rule Learning</strong> - Discovering relationships between fire safety factors</li>
+            </ul>
+        </div>
+        
+        <h3>5. Deep Learning</h3>
+        <div class="module-content">
+            <p>Advanced neural network approaches for complex fire safety problems:</p>
+            <ul>
+                <li><strong>Convolutional Neural Networks (CNNs)</strong> - Image-based fire detection and smoke analysis</li>
+                <li><strong>Recurrent Neural Networks (RNNs)</strong> - Predicting fire behavior sequences and time series forecasting</li>
+                <li><strong>LSTM Networks</strong> - Long-term pattern recognition in fire monitoring data</li>
+                <li><strong>Transfer Learning</strong> - Adapting pre-trained models for specific fire detection scenarios</li>
+            </ul>
+        </div>
+        
+        <h3>6. Model Evaluation</h3>
+        <div class="module-content">
+            <p>Essential techniques for assessing ML model performance in fire safety contexts:</p>
+            <ul>
+                <li><strong>Evaluation Metrics</strong> - Precision, recall, F1-score, ROC curves for classification; RMSE, MAE for regression</li>
+                <li><strong>Cross-validation</strong> - Ensuring model reliability through k-fold testing</li>
+                <li><strong>Confusion Matrix Analysis</strong> - Understanding the implications of false positives/negatives in fire detection</li>
+                <li><strong>Model Interpretability</strong> - Techniques for explaining model predictions to fire safety professionals</li>
+            </ul>
+            
+            <div class="warning">
+                <p><strong>Critical Note:</strong> In fire safety applications, the cost of false negatives (failing to detect a fire) is typically much higher than the cost of false positives. Your evaluation metrics should be weighted accordingly.</p>
+            </div>
+        </div>
+        
+        <h3>7. AI Agents in Fire Safety</h3>
+        <div class="module-content">
+            <p>Exploring the emerging field of autonomous AI systems for fire safety:</p>
+            <ul>
+                <li><strong>Reinforcement Learning</strong> - Training agents to optimize evacuation routes and resource allocation</li>
+                <li><strong>Multi-agent Systems</strong> - Coordinated responses across multiple fire safety subsystems</li>
+                <li><strong>Human-AI Collaboration</strong> - Designing interfaces for effective cooperation between AI systems and firefighters</li>
+                <li><strong>Adaptive Learning</strong> - Systems that improve their fire response strategies over time</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Module Quizzes and Assessments</h2>
+        <p>Knowledge assessment is a critical component of your learning journey:</p>
+        
+        <div class="quiz-section">
+            <h3>Quiz Structure</h3>
+            <p>Each module concludes with a comprehensive assessment consisting of:</p>
+            <ul>
+                <li><strong>Multiple-choice Questions</strong> - Testing theoretical understanding</li>
+                <li><strong>Scenario-based Problems</strong> - Applying concepts to realistic fire safety situations</li>
+                <li><strong>Code Implementation Tasks</strong> - Demonstrating practical programming skills</li>
+            </ul>
+            
+            <h3>Grading System</h3>
+            <p>Quiz performance is evaluated on a percentage scale:</p>
+            <ul>
+                <li>90-100%: Excellent understanding</li>
+                <li>75-89%: Good understanding</li>
+                <li>60-74%: Satisfactory understanding</li>
+                <li>Below 60%: Needs improvement (we recommend reviewing the module)</li>
+            </ul>
+            
+            <h3>Sample Quiz Questions</h3>
+            <ol>
+                <li>Which ML algorithm would be most appropriate for predicting the exact temperature at which a specific material ignites?
+                    <ul>
+                        <li>A. Logistic regression</li>
+                        <li>B. Linear regression</li>
+                        <li>C. K-means clustering</li>
+                        <li>D. Association rule mining</li>
+                    </ul>
+                </li>
+                <li>A false negative in a smoke detection system means:
+                    <ul>
+                        <li>A. The system detects smoke when there is none</li>
+                        <li>B. The system fails to detect smoke when it is present</li>
+                        <li>C. The system correctly identifies the absence of smoke</li>
+                        <li>D. The system identifies a different type of fire than what is present</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Practical ML Examples</h2>
+        <p>The platform includes several interactive examples demonstrating real-world applications:</p>
+        
+        <h3>Thermal Hotspot Detection</h3>
+        <p>Explore how computer vision and deep learning can identify potential fire hazards through thermal imaging.</p>
+        
+        <h3>Optimal Evacuation Route Planning</h3>
+        <p>Experience how reinforcement learning algorithms can determine the safest evacuation routes in dynamic fire scenarios.</p>
+        
+        <h3>Fire Equipment Maintenance Prediction</h3>
+        <p>Learn how predictive analytics can optimize maintenance schedules for fire safety equipment, reducing failures during emergencies.</p>
+        
+        <h3>Fire Spread Prediction & Simulation</h3>
+        <p>Understand how physics-informed machine learning models can forecast fire propagation under various environmental conditions.</p>
+        
+        <div class="tip">
+            <p><strong>Interactive Learning:</strong> Each example includes adjustable parameters that allow you to explore different scenarios and see how the ML models respond to changing conditions.</p>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Progress Tracking</h2>
+        <p>The platform provides comprehensive tracking of your learning journey:</p>
+        <ul>
+            <li><strong>Module Completion Status</strong> - Visual indicators of which modules you've completed</li>
+            <li><strong>Quiz Performance</strong> - Detailed breakdown of your scores on each assessment</li>
+            <li><strong>Time Analytics</strong> - Tracking of time spent on each module and section</li>
+            <li><strong>Learning Recommendations</strong> - Personalized suggestions for what to study next based on your progress</li>
+            <li><strong>Achievement Badges</strong> - Recognition for completing modules and achieving high quiz scores</li>
+        </ul>
+        
+        <p>All progress is automatically saved to your account, allowing you to continue your learning journey across multiple sessions.</p>
+    </div>
+    
+    <div class="section">
+        <h2>Technical Requirements</h2>
+        <p>For optimal experience with ML FireSafetyTutor:</p>
+        <ul>
+            <li><strong>Web Browser</strong> - Modern browsers like Chrome, Firefox, Safari, or Edge (latest versions)</li>
+            <li><strong>Display</strong> - Minimum resolution of 1280x800 for best visualization of charts and simulations</li>
+            <li><strong>Internet Connection</strong> - Broadband connection for smooth interaction with simulations</li>
+            <li><strong>No Installation Required</strong> - The platform runs entirely in your web browser</li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <h2>Support and Resources</h2>
+        <p>If you have questions or encounter technical issues:</p>
+        <ul>
+            <li><strong>FAQs</strong> - Each module includes a frequently asked questions section</li>
+            <li><strong>Reference Library</strong> - Additional reading materials and resources for each topic</li>
+            <li><strong>Code Repository</strong> - Sample implementations that you can download and modify</li>
+            <li><strong>Support Contact</strong> - Reach out through the feedback form for technical assistance</li>
+        </ul>
+        
+        <h3>Academic Support</h3>
+        <p>For academic inquiries related to the ML content or fire safety applications:</p>
+        <p><strong>Professor Renat Khabibulin, PhD</strong><br>
+        <a href="mailto:kh.r.online@gmail.com">kh.r.online@gmail.com</a></p>
+    </div>
+    
+    <div class="footer">
+        <p>© 2025 ML FireSafetyTutor | Created by Renat Khabibulin, PhD<br>
+        All rights reserved. The content, software, and methodologies in this platform are protected by copyright laws.</p>
+    </div>
+</body>
+</html>
