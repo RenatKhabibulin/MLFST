@@ -1,39 +1,34 @@
 """
-Main entry point for the ML FireSafetyTutor Streamlit application.
-This is a self-contained file for streamlit.io deployment.
+Main entry point for FireSafety ML application.
+This file is used by Streamlit for deployment.
 """
 
+# Include full application code for simplicity
 import streamlit as st
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 import os
 import sys
 
-# Add the current directory to the Python path if it's not already there
+# Ensure application modules can be found
 current_dir = os.path.dirname(os.path.abspath(__file__))
 if current_dir not in sys.path:
     sys.path.insert(0, current_dir)
 
-# Import the app module function directly
+# Import the app module and run main
 try:
-    from app import main as app_main
-    
-    # Run the main application function
-    app_main()
-    
-except ImportError as e:
-    st.error(f"Error importing application modules: {e}")
+    import app
+    app.main()
+except Exception as e:
+    st.error(f"Error: {e}")
     st.write("""
-    ## ML FireSafetyTutor Application
+    # Fire Safety ML Application
     
-    This application provides interactive machine learning education focused on fire safety topics.
-    
-    Unfortunately, there was an error loading the application.
-    
-    ### Troubleshooting:
-    - Check that all required Python packages are installed
-    - Ensure the application files are correctly structured
+    This application combines machine learning with fire safety education.
     """)
     
-    # Display the current directory structure for debugging
-    st.write("### Current Directory Structure:")
-    files = os.listdir(current_dir)
-    st.write(", ".join(files))
+    # Display debug info
+    st.info("Application could not be loaded. Please check dependencies and file structure.")
+    st.write("Files available:")
+    st.code("\n".join(os.listdir(current_dir)))
