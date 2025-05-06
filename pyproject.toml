@@ -1,4 +1,21 @@
-# Minimal configuration
 [build-system]
-requires = ["setuptools>=42.0"]
+requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "streamlit-app"
+version = "0.1.0"
+authors = [
+    {name = "FireSafety Team", email = "example@example.com"},
+]
+description = "FireSafety ML Application"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/example/streamlit-app"
