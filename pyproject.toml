@@ -19,4 +19,9 @@ dependencies = [
 ]
 
 [tool.setuptools]
-packages = ["modules"]
+packages = [".", "modules"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["*"]
+exclude = ["tests*"]
