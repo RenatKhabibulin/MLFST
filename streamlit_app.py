@@ -3,6 +3,9 @@ Main entry point for the ML FireSafetyTutor Streamlit application.
 This file is used by streamlit.io for deployment.
 """
 
+# Import the package to ensure it's properly installed
+import mlfiresafetytutor
+
 # Import the main app module and run it
 import app
 

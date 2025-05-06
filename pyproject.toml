@@ -1,9 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "mlfiresafetytutor"
 version = "0.1.0"
-requires-python = ">=3.11"
+authors = [
+    {name = "Author", email = "author@example.com"},
+]
 description = "ML FireSafetyTutor - Interactive platform for learning ML in fire safety applications"
 readme = "readme.txt"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
 dependencies = [
     "streamlit>=1.45.0",
     "pandas>=2.2.3",
@@ -13,12 +25,15 @@ dependencies = [
     "scikit-learn>=1.6.1",
     "sqlalchemy>=2.0.40",
     "psycopg2-binary>=2.9.10",
-    "scipy>=1.15.2",
+    "scipy>=1.15.2", 
     "seaborn>=0.13.2",
     "anthropic>=0.50.0",
     "openai>=1.77.0",
 ]
 
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+[project.urls]
+"Homepage" = "https://github.com/example/mlfiresafetytutor"
+"Bug Tracker" = "https://github.com/example/mlfiresafetytutor/issues"
+
+[tool.setuptools]
+packages = ["mlfiresafetytutor", "modules"]
