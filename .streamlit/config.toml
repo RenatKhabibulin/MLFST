@@ -1,8 +1,8 @@
 [server]
 headless = true
 address = "0.0.0.0"
-# Для локального запуска используем порт 5000
-# Для Streamlit Cloud следует использовать 8501
+# Для локального запуска в Replit используем порт 5000, так как порт 8501 может быть заблокирован 
+# Для Streamlit Cloud используется порт 8501 через entry.sh и Procfile
 port = 5000
 enableCORS = false
 enableXsrfProtection = false
