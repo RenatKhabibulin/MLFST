@@ -10,6 +10,9 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 if current_dir not in sys.path:
     sys.path.insert(0, current_dir)
 
+# Получение порта из переменной окружения или использование порта по умолчанию
+PORT = int(os.environ.get("PORT", 8501))
+
 st.title("ML FireSafety Tutor")
 st.markdown("""
 ## Welcome to the ML FireSafety Tutor

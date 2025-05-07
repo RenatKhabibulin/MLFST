@@ -1,4 +1,8 @@
 [server]
 headless = true
 address = "0.0.0.0"
+# Для локального запуска используем порт 5000
+# Для Streamlit Cloud следует использовать 8501
 port = 5000
+enableCORS = false
+enableXsrfProtection = false
