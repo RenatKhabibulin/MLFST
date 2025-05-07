@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Скрипт для запуска Streamlit в Streamlit Cloud
+# Ультралегкая версия для запуска на Streamlit Cloud без ML зависимостей
 
 # Установка правильного порта для Streamlit Cloud
 export PORT=8501
@@ -9,13 +10,14 @@ export PORT=8501
 echo "Starting Streamlit on port $PORT"
 echo "Python version: $(python --version)"
 echo "Current directory: $(pwd)"
-echo "Files in current directory: $(ls -la)"
-echo "Config directory content:"
-ls -la .streamlit/
+echo "System memory info:"
+free -h
+echo "Disk space:"
+df -h .
 
-# Проверяем содержимое конфиг-файла
-echo "Current config.toml:"
-cat .streamlit/config.toml
+# Проверка статуса портов
+echo "Port status (8501):"
+nc -zv localhost 8501 || echo "Port 8501 is available"
 
 # Перестраховка: создаем правильный конфиг
 mkdir -p .streamlit
@@ -26,10 +28,11 @@ port = 8501
 address = "0.0.0.0"
 enableCORS = false
 enableXsrfProtection = false
+maxUploadSize = 1
+maxMessageSize = 5
 EOL
 
-echo "Updated config.toml:"
-cat .streamlit/config.toml
+echo "Config created. Starting ultralight version..."
 
-# Запуск Streamlit на нужном порту с явным указанием хоста
-streamlit run app_cloud.py --server.port $PORT --server.address 0.0.0.0
+# Запуск ультралегкой версии приложения без ML зависимостей
+streamlit run app_cloud_ultralight.py --server.port $PORT --server.address 0.0.0.0
