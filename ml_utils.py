@@ -19,13 +19,16 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
 
-def train_linear_regression(X, y):
+@st.cache_resource
+def train_linear_regression(X, y, _hash=None):
     """
     Train a linear regression model and return predictions and metrics
+    Uses caching to avoid retraining the model unnecessarily
     
     Parameters:
     - X: features array
     - y: target array
+    - _hash: optional parameter for cache invalidation
     
     Returns:
     - model: trained LinearRegression model

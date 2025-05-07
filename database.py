@@ -5,15 +5,24 @@ from pathlib import Path
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from sqlalchemy import create_engine
+import streamlit as st
 
+@st.cache_resource
 def get_db_connection():
-    """Get a connection to the PostgreSQL database"""
+    """
+    Get a connection to the PostgreSQL database
+    Uses caching to reuse connections for better performance
+    """
     db_url = os.environ.get('DATABASE_URL')
     conn = psycopg2.connect(db_url)
     return conn
 
+@st.cache_resource
 def get_db_engine():
-    """Get SQLAlchemy engine for the PostgreSQL database"""
+    """
+    Get SQLAlchemy engine for the PostgreSQL database
+    Uses caching to avoid recreating the engine on every request
+    """
     db_url = os.environ.get('DATABASE_URL')
     engine = create_engine(db_url)
     return engine

@@ -140,22 +140,39 @@ def load_css():
     </style>
     """, unsafe_allow_html=True)
 
-def load_dataset(filename):
+@st.cache_data
+def load_dataset(filename, max_rows=None):
     """
-    Load a dataset from the data directory
+    Load a dataset from the data directory with caching
     Returns a pandas DataFrame
+    
+    Parameters:
+    - filename: Name of the file to load
+    - max_rows: Optional limit on number of rows to load (for memory optimization)
     """
     data_path = Path("data") / filename
     
     if data_path.exists():
-        return pd.read_csv(data_path)
+        if max_rows:
+            return pd.read_csv(data_path, nrows=max_rows)
+        else:
+            return pd.read_csv(data_path)
     else:
         st.error(f"Dataset file {filename} not found")
         return pd.DataFrame()
 
+@st.cache_data
 def plot_confusion_matrix(cm, class_names):
     """
     Plot a confusion matrix using matplotlib
+    The result is cached for improved performance
+    
+    Parameters:
+    - cm: confusion matrix array
+    - class_names: list of class names for axis labels
+    
+    Returns:
+    - fig: matplotlib figure
     """
     fig, ax = plt.subplots(figsize=(8, 6))
     

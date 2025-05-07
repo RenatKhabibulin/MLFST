@@ -29,9 +29,11 @@ FIRESAFETY_COLORS = {
 FIRESAFETY_SEQUENTIAL = ['#FFCCBC', '#FFAB91', '#FF8A65', '#FF7043', '#FF5722', '#F4511E', '#E64A19', '#D84315', '#BF360C']
 FIRESAFETY_CATEGORICAL = ['#FF5722', '#4CAF50', '#2196F3', '#9C27B0', '#FFC107', '#607D8B', '#795548', '#009688', '#E91E63']
 
+@st.cache_data
 def apply_firesafety_theme_to_plotly(fig, title=None, height=None, legend_title=None):
     """
     Apply consistent Fire Safety theme to Plotly figures
+    Uses caching to avoid recomputing the styling for the same input
     
     Parameters:
     - fig: A plotly figure object
@@ -90,9 +92,11 @@ def apply_firesafety_theme_to_plotly(fig, title=None, height=None, legend_title=
     
     return fig
 
+@st.cache_data
 def apply_firesafety_theme_to_matplotlib(ax=None, title=None, figsize=(10, 6)):
     """
     Apply consistent Fire Safety theme to Matplotlib plots
+    Uses caching to avoid recomputing the styling for the same input
     
     Parameters:
     - ax: A matplotlib axis (or None to create a new one)
