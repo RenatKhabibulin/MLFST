@@ -30,8 +30,28 @@ else
     echo "   Создайте этот файл для деплоя в Streamlit Cloud."
 fi
 
-# 4. Напоминаем о Python 3.11
-echo "4. Напоминание о версии Python..."
+# 4. Проверяем наличие entry.sh и Procfile
+echo "4. Проверка скрипта запуска..."
+if [ -f "entry.sh" ]; then
+    echo "   entry.sh найден."
+    if [ -f "Procfile" ]; then
+        echo "   Procfile найден."
+    else
+        echo "   ВНИМАНИЕ: Procfile не найден!"
+        echo "   Создаем Procfile..."
+        echo "web: bash entry.sh" > Procfile
+        echo "   Procfile создан."
+    fi
+    # Устанавливаем права на выполнение
+    chmod +x entry.sh
+    echo "   Права на выполнение entry.sh установлены."
+else
+    echo "   ВНИМАНИЕ: entry.sh не найден!"
+    echo "   Это может вызвать проблемы с портами при деплое."
+fi
+
+# 5. Напоминаем о Python 3.11
+echo "5. Напоминание о версии Python..."
 echo "   Рекомендуется использовать Python 3.11 (не 3.12) для деплоя."
 
 echo ""
@@ -42,4 +62,4 @@ echo "   - Python version: 3.11"
 echo "   - Requirements file: requirements-clean.txt или requirements.txt"
 echo ""
 echo "Для возврата к локальной разработке, восстановите оригинальный config.toml:"
-echo "cp .streamlit/config.toml.backup .streamlit/config.toml"
+echo "./restore_local_config.sh"

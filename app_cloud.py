@@ -11,7 +11,13 @@ if current_dir not in sys.path:
     sys.path.insert(0, current_dir)
 
 # Получение порта из переменной окружения или использование порта по умолчанию
+# Streamlit Cloud обычно использует порт 8501
 PORT = int(os.environ.get("PORT", 8501))
+
+# Информация о среде запуска (для отладки)
+is_cloud = "STREAMLIT_CLOUD" in os.environ or "DEPLOY_URL" in os.environ
+print(f"Running in {'Streamlit Cloud' if is_cloud else 'local environment'}")
+print(f"Using port: {PORT}")
 
 st.title("ML FireSafety Tutor")
 st.markdown("""

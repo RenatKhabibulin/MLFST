@@ -40,6 +40,17 @@ cp .streamlit/config.toml .streamlit/config.toml.backup
 cp .streamlit/config_cloud.toml .streamlit/config.toml
 ```
 
+### Использование скрипта запуска entry.sh
+
+Для улучшения совместимости с Streamlit Cloud создан специальный скрипт `entry.sh`, который обеспечивает запуск приложения на правильном порту. 
+
+Файл `Procfile` в корне проекта указывает Streamlit Cloud использовать этот скрипт:
+```
+web: bash entry.sh
+```
+
+Это гарантирует, что приложение будет запущено на порту 8501, даже если конфигурация в `.streamlit/config.toml` указывает другой порт.
+
 ## Деплой на Streamlit Cloud
 
 1. **Залейте подготовленный код в GitHub-репозиторий**
