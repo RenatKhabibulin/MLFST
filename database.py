@@ -7,11 +7,12 @@ from psycopg2.extras import RealDictCursor
 from sqlalchemy import create_engine
 import streamlit as st
 
-@st.cache_resource
+# Важно: не кэшируем подключение к базе данных, так как это может привести 
+# к проблемам с закрытыми курсорами
 def get_db_connection():
     """
     Get a connection to the PostgreSQL database
-    Uses caching to reuse connections for better performance
+    Creates a new connection for each request to avoid cursor issues
     """
     db_url = os.environ.get('DATABASE_URL')
     conn = psycopg2.connect(db_url)
